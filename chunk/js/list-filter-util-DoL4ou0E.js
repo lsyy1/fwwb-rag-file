@@ -1,0 +1,2 @@
+function n(n,r,t){const a=[];return Array.isArray(n)&&n.forEach(n=>{const o=a.find(t=>t.id===n[r]);o?o.count+=1:a.push({id:n[r],label:n[t],count:1})}),a}function r(n,r){const t=[];return n.forEach(n=>{Array.isArray(n[r])&&n[r].forEach(n=>{const r=t.find(r=>r.id===n);r?r.count+=1:t.push({id:n,label:n,count:1})})}),t}function t(r,t){return{field:"owner",list:n(r,"tenant_id",t||"nickname"),label:"Owner"}}export{r as a,t as b,n as g};
+//# sourceMappingURL=list-filter-util-DoL4ou0E.js.map

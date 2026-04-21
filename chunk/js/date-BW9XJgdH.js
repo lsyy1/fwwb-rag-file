@@ -1,0 +1,2 @@
+import{d as t}from"./utils-CKvWTVZl.js";function r(r,s){const o=s||"DD/MM/YYYY HH:mm:ss";return r?t(r).format(o):""}function s(r){return r?t(r).format("HH:mm:ss"):""}function o(r){return r?t(r).format("DD/MM/YYYY"):""}function n(t){if(isNaN(t)||t<0)return"0s";const r=Math.floor(t/3600),s=Math.floor(t%3600/60),o=t%60,n=0===o?"0":o.toFixed(3).replace(/\.?0+$/,""),a=[];return r>0&&a.push(`${r}h `),s>0&&a.push(`${s}m `),(o||0===a.length)&&a.push(`${n}s`),a.join("")}export{n as a,r as b,s as c,o as f};
+//# sourceMappingURL=date-BW9XJgdH.js.map
