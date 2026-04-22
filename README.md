@@ -6,32 +6,107 @@
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-brightgreen)](https://lsyy1.github.io/fwwb-rag-file/)
 
-在线演示地址：https://lsyy1.github.io/fwwb-rag-file/
+在线演示地址：[https://lsyy1.github.io/fwwb-rag-file/](https://lsyy1.github.io/fwwb-rag-file/)
 
 > **注意**：当前 Demo 仅展示前端界面，完整功能需要部署后端服务。
 
 ## 📋 项目简介
 
-本项目是 RAGFlow 前端应用的编译产物，提供以下功能：
+本项目是 RAGFlow 前端应用的编译产物，提供以下核心功能：
 
 - 📄 文档上传与解析
 - 🔍 智能问答检索
 - 📊 文档可视化展示
 - 🤖 基于大语言模型的内容理解
+- ✨ **智能填表**（核心比赛功能）
 
-## 🔗 访问方式
+## 🏆 评委一键部署指南
+
+### 前置条件
+
+| 项目 | 要求 |
+|------|------|
+| Docker | 24.0+ |
+| Docker Compose | v2.0+ |
+| 内存 | ≥ 16GB |
+| 磁盘空间 | ≥ 20GB |
+
+### 一键启动
+
+```bash
+# 1. 克隆仓库
+git clone https://github.com/lsyy1/fwwb-rag-file.git
+cd fwwb-rag-file
+
+# 2. 进入 docker 目录
+cd docker
+
+# 3. 复制配置文件
+cp .env.example .env
+
+# 4. 启动服务（CPU 模式）
+docker compose --profile cpu -f docker-compose.yml up -d
+```
+
+### 服务访问
+
+| 服务 | 地址 | 说明 |
+|------|------|------|
+| 前端页面 | http://localhost:9222 | 主应用界面 |
+| 智能填表 | http://localhost:9222/#/form-fill | 核心功能入口 |
+| API 文档 | http://localhost:9380/api/docs | 后端 API 文档 |
+
+### 验收步骤
+
+1. **访问系统**：打开 http://localhost:9222
+2. **注册账号**：点击「注册」创建账号
+3. **登录系统**：使用注册账号登录
+4. **进入智能填表**：点击左侧「智能填表」菜单
+5. **新建任务**：点击「新建任务」，输入任务名称
+6. **上传文件**：上传数据源文件和模板文件
+7. **开始处理**：点击「开始处理」
+8. **查看结果**：等待处理完成，查看准确率评测（≥95%）
+9. **下载结果**：点击「下载结果」获取填写完成的文档
+
+### 预期指标
+
+| 指标 | 预期值 |
+|------|--------|
+| 字段匹配准确率 | ≥ 95% |
+| 数据填充完整度 | ≥ 90% |
+| 处理时间 | < 2 分钟 |
+
+### 服务管理
+
+```bash
+# 查看日志
+docker compose logs -f
+
+# 停止服务
+docker compose down
+
+# 重启服务
+docker compose restart
+```
+
+### 常见问题
+
+- **端口占用**：修改 `.env` 文件中的 `SVR_WEB_HTTP_PORT`
+- **内存不足**：确保服务器内存 ≥ 16GB
+- **镜像拉取失败**：检查网络连接或配置国内镜像源
+
+## 🔗 GitHub Pages 访问
 
 ### 首页
-```
-https://lsyy1.github.io/fwwb-rag-file/
-```
+[https://lsyy1.github.io/fwwb-rag-file/](https://lsyy1.github.io/fwwb-rag-file/)
 
 ### 各功能页面
+
 | 页面 | 路径 |
 |------|------|
 | 首页 | `/fwwb-rag-file/#/home` |
 | 数据集 | `/fwwb-rag-file/#/datasets` |
-| 文档填写 | `/fwwb-rag-file/#/form-fill` |
+| 智能填表 | `/fwwb-rag-file/#/form-fill` |
 | 搜索 | `/fwwb-rag-file/#/searches` |
 | 聊天 | `/fwwb-rag-file/#/chats` |
 | 文件管理 | `/fwwb-rag-file/#/files` |
@@ -41,53 +116,21 @@ https://lsyy1.github.io/fwwb-rag-file/
 
 ## ⚠️ 关于 API 请求错误
 
-当访问 Demo 页面时，浏览器控制台可能会看到类似以下的错误：
+当访问 Demo 页面时，浏览器控制台可能会看到 API 请求 404 错误，这是正常现象。原因是 GitHub Pages 仅托管静态文件，不提供后端 API 服务。如需完整功能，请使用 Docker Compose 部署后端服务。
 
-```
-GET https://lsyy1.github.io/v1/user/info 404 (Not Found)
-```
+## 🐳 Docker 部署
 
-这是**正常现象**，原因如下：
-
-1. **GitHub Pages 仅托管静态文件**，不提供后端 API 服务
-2. 前端应用启动时会自动请求后端 API 获取用户信息等数据
-3. 由于没有后端服务，这些请求会返回 404
-
-如需完整功能，请部署后端服务（见下文）。
-
-## 🐳 Docker 部署（完整功能）
-
-### 方式一：使用官方镜像
+### 方式一：使用比赛专用镜像
 
 ```bash
-# 拉取镜像
+docker pull lsyy1/ragflow-fwwb:1.0.0
+```
+
+### 方式二：使用官方镜像
+
+```bash
 docker pull ragflow/ragflow:latest
-
-# 启动容器（包含前端和后端）
-docker run -d \
-  -p 9222:9222 \
-  -p 9380:9380 \
-  -v /path/to/data:/app/data \
-  --name ragflow \
-  ragflow/ragflow:latest
 ```
-
-### 方式二：本地构建运行
-
-```bash
-# 克隆源码仓库
-git clone https://github.com/infiniflow/ragflow.git
-cd ragflow
-
-# 使用 Docker Compose 启动所有服务
-cd docker
-docker compose -f docker-compose.yml up -d
-```
-
-### 访问地址
-
-- **前端界面**: http://localhost:9222
-- **API 文档**: http://localhost:9380/api/docs
 
 ## 🛠️ 技术栈
 
@@ -98,7 +141,6 @@ docker compose -f docker-compose.yml up -d
 | 样式方案 | Tailwind CSS 3 |
 | 状态管理 | Zustand |
 | 路由管理 | React Router (HashRouter) |
-| 图表库 | Recharts / AntV G6 |
 | 后端框架 | Python Quart |
 | 数据库 | MySQL / Elasticsearch |
 
@@ -106,7 +148,7 @@ docker compose -f docker-compose.yml up -d
 
 ```
 fwwb-rag-file/
-├── assets/          # 静态资源（CSS、图片等）
+├── assets/          # 静态资源
 ├── chunk/           # 代码块（按需加载）
 ├── entry/           # 入口文件
 ├── pdfjs-dist/      # PDF 预览依赖
@@ -116,32 +158,12 @@ fwwb-rag-file/
 ├── index.html       # 入口 HTML
 ├── 404.html         # 路由 fallback
 ├── logo.svg         # Logo
+├── docker/          # Docker 配置
+│   ├── .env.example # 配置模板
+│   ├── docker-compose.yml # 编排文件
+│   ├── docker-compose-base.yml # 基础服务配置
+│   └── entrypoint.sh # 启动脚本
 └── README.md        # 项目说明
-```
-
-## 🚀 快速开始
-
-### 本地开发
-
-```bash
-# 安装依赖
-npm install
-
-# 启动开发服务器（需配合后端）
-npm run dev
-
-# 构建生产版本
-VITE_BASE_URL=/fwwb-rag-file/ npm run build
-```
-
-### 部署到 GitHub Pages
-
-```bash
-# 构建并部署
-VITE_BASE_URL=/fwwb-rag-file/ npm run build
-cp -r dist/* ragflow-demo/
-cd ragflow-demo
-git add . && git commit -m "Update demo" && git push origin main
 ```
 
 ## 📝 更新记录
@@ -150,7 +172,8 @@ git add . && git commit -m "Update demo" && git push origin main
 |------|----------|------|
 | v1.0.0 | 初始版本发布 | 2026-04 |
 | v1.0.1 | 修复路由问题，改用 HashRouter | 2026-04 |
-| v1.0.2 | 修复资源路径问题，设置 VITE_BASE_URL=/fwwb-rag-file/ | 2026-04 |
+| v1.0.2 | 修复资源路径问题 | 2026-04 |
+| v1.0.3 | 添加评委一键部署指南和 Docker 配置 | 2026-04 |
 
 ## 📄 License
 
@@ -162,4 +185,4 @@ MIT License
 
 ---
 
-**注意**: 本仓库仅包含编译后的静态文件，完整源码请访问 [RAGFlow 官方仓库](https://github.com/infiniflow/ragflow)。
+**比赛专用镜像**: `lsyy1/ragflow-fwwb:1.0.0`
