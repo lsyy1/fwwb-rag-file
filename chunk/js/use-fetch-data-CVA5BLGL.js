@@ -1,2 +1,0 @@
-import{k as e}from"./use-agent-request-C3KEdNQ6.js";import{r as s}from"./react-B3zm6vo1.js";import{u as t}from"./store-D7i-i6fm.js";const o=()=>{const{loading:o,data:r,refetch:a}=e(),l=(()=>{const{setEdges:e,setNodes:o}=t(e=>e);return s.useCallback(({nodes:s=[],edges:t=[]})=>{(s.length||t.length)&&(o(s),e(t))},[e,o])})();return s.useEffect(()=>{var e,s;l(null!=(s=null==(e=null==r?void 0:r.dsl)?void 0:e.graph)?s:{})},[l,r]),s.useEffect(()=>{a()},[a]),{loading:o,flowDetail:r}};export{o as u};
-//# sourceMappingURL=use-fetch-data-CVA5BLGL.js.map

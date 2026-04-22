@@ -1,2 +1,0 @@
-import{m as o}from"./micromark-extension-math-mY9hDXHM.js";import{m as s,a as n}from"./mdast-util-math-ChbeHOzu.js";const t={};function r(r){const a=r||t,m=this.data(),i=m.micromarkExtensions||(m.micromarkExtensions=[]),e=m.fromMarkdownExtensions||(m.fromMarkdownExtensions=[]),x=m.toMarkdownExtensions||(m.toMarkdownExtensions=[]);i.push(o(a)),e.push(s()),x.push(n(a))}export{r};
-//# sourceMappingURL=remark-math-CJR37dQ6.js.map

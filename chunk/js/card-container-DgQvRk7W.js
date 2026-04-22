@@ -1,0 +1,2 @@
+import{j as r}from"./react-B3zm6vo1.js";import{c as s}from"../../entry/js/index-CAX6yScJ.js";function t({children:t,className:a}){return r.jsx("div",{"data-inspector-line":"8","data-inspector-column":"4","data-inspector-relative-path":"src/components/card-container.tsx",className:s("grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 auto-rows-auto content-start",a),children:t})}export{t as C};
+//# sourceMappingURL=card-container-DgQvRk7W.js.map
