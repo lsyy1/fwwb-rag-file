@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  mysql:
+    extends:
+      file: docker-compose-base.yml
+      service: mysql
+
+  elasticsearch:
+    extends:
+      file: docker-compose-base.yml
+      service: elasticsearch
+
+  redis:
+    extends:
+      file: docker-compose-base.yml
+      service: redis
+
+  minio:
+    extends:
+      file: docker-compose-base.yml
+      service: minio
+
+  ragflow:
+    image: ${RAGFLOW_IMAGE:-lsyy1/ragflow-fwwb:1.0.0}
+    container_name: ragflow
+    restart: always
+    environment:
+      - DOC_ENGINE=${DOC_ENGINE:-elasticsearch}
+      - DEVICE=${DEVICE:-cpu}
+      - SVR_HTTP_PORT=${SVR_HTTP_PORT:-9380}
+      - ADMIN_SVR_HTTP_PORT=${ADMIN_SVR_HTTP_PORT:-9381}
+      - SVR_WEB_HTTP_PORT=${SVR_WEB_HTTP_PORT:-9222}
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_USER=ragflow
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-infini_rag_flow}
+      - ES_HOST=elasticsearch
+      - ES_PORT=9200
+      - ES_USER=elastic
+      - ES_PASSWORD=${ELASTIC_PASSWORD:-infini_rag_flow}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-infini_rag_flow}
+      - MINIO_HOST=minio
+      - MINIO_PORT=9000
+      - MINIO_USER=${MINIO_USER:-rag_flow}
+      - MINIO_PASSWORD=${MINIO_PASSWORD:-infini_rag_flow}
+      - MEM_LIMIT=${MEM_LIMIT:-16147483648}
+      - TZ=${TZ:-Asia/Shanghai}
+      - REGISTER_ENABLED=${REGISTER_ENABLED:-1}
+      - API_PROXY_SCHEME=${API_PROXY_SCHEME:-python}
+    ports:
+      - "${SVR_WEB_HTTP_PORT:-9222}:9222"
+      - "${SVR_HTTP_PORT:-9380}:9380"
+      - "${ADMIN_SVR_HTTP_PORT:-9381}:9381"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    networks:
+      - ragflow-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9380/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  mysql-data:
+  es-data:
+  redis-data:
+  minio-data:
+
+networks:
+  ragflow-network:
+    driver: bridge
+
+profiles:
+  - cpu
+  - gpu
